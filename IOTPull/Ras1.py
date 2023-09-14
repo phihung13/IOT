@@ -1,9 +1,9 @@
 from urllib import request, parse
 from time import sleep
 from random import randint 
+from datetime import datetime
 
 def http(): 
-    
     def make_param_thingspeak(humi,temp,random):
         params = parse.urlencode({'field1':humi,'field2':temp,'field3':random }).encode()
         return params
@@ -23,6 +23,8 @@ def http():
             humi = randint(70,100)
             temp = randint(25,45)
             rd = randint(0,100)
+            now = datetime.now()
+            current_time = now.strftime("%H:%M:%S")
             print("do am",humi)
             print("nhiet do",temp)
             print("tin hieu random",rd)

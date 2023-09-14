@@ -4,6 +4,7 @@ import json
 from grove.display.jhd1802 import JHD1802
 from gpiozero import LED
 from grove.grove_relay import GroveRelay
+from datetime import datetime
 
 bz = LED(12)
 lcd = JHD1802()
@@ -42,6 +43,8 @@ while True:
     value1 = thingspeak_get_1()
     value2 = thingspeak_get_2()
     value3 = thingspeak_get_3()
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
     print("do am ",value1)
     print('nhiet do',value2)
     print('random ',value3)
