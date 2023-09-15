@@ -37,6 +37,7 @@ def on_message(client, userdata, message):
             buzzer.off()
         if int(temp)>30:
             buzzer.on()
+    
     if message.topic == 'channels/2030546/subscribe/fields/field2':
         humi = message.payload.decode()[0:2]
         lcd.setCursor(0,9)
@@ -48,6 +49,7 @@ def on_message(client, userdata, message):
             relay.on()
         if int(humi)<80:
             relay.off()
+    
     if message.topic == 'channels/2030546/subscribe/fields/field3':
         rd = message.payload.decode()[0:3]
         rds = rd

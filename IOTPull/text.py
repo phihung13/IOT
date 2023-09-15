@@ -1,53 +1,64 @@
-from urllib import request, parse
-from time import sleep
-import json
+import paho.mqtt.client as mqtt
+import time
+from gpiozero import LED
+from grove.display.jhd1802 import JHD1802
+username = "Kx4yGAsGCCcGCw8cHRUrChs"
+password = "1ci9UdvACHX+UWtmHxxEJf8F"
+ClientID = "Kx4yGAsGCCcGCw8cHRUrChs"
+i = 0
 
 
-api_key_read = '5Z2BYMR3LO3FHSW0'
-channel_ID = '2271054'
+def on_connect(client, userdata, flags, rc):
+    print("Connected With Result Code {}".format(rc))
+    channel_ID = "2271054"
+    client.subscribe("channels/%s/subscribe/fields/field1"%(channel_ID))
+    client.subscribe("channels/%s/subscribe/fields/field2"%(channel_ID))
+    client.subscribe("channels/%s/subscribe/fields/field3"%(channel_ID))
 
-def thingspeak_get_1():
-    url = 'https://api.thingspeak.com/channels/%s/fields/1/last.json?api_key=%s'%(channel_ID,api_key_read)
-    req = request.Request(url,method = 'GET')
-    r = request.urlopen(req)
-    respone_data = r.read().decode()
-    respone_data = json.loads(respone_data)
-    value = respone_data['field1']    
-    return value
-def thingspeak_get_2():
-    url = 'https://api.thingspeak.com/channels/%s/fields/2/last.json?api_key=%s'%(channel_ID,api_key_read)
-    req = request.Request(url,method = 'GET')
-    r = request.urlopen(req)
-    respone_data = r.read().decode()
-    respone_data = json.loads(respone_data)
-    value = respone_data['field2']    
-    return value
-def thingspeak_get_3():
-    url = 'https://api.thingspeak.com/channels/%s/fields/3/last.json?api_key=%s'%(channel_ID,api_key_read)
-    req = request.Request(url,method = 'GET')
-    r = request.urlopen(req)
-    respone_data = r.read().decode()
-    respone_data = json.loads(respone_data)
-    value = respone_data['field3']    
-    return value
-
-while True:
-    value1 = thingspeak_get_1()
-    value2 = thingspeak_get_2()
-    value3 = thingspeak_get_3()
-    print("do am ",value1)
-    print('nhiet do',value2)
-    print('random ',value3)
-    if int(value3) > 50:
-        print("f1")
-    if int(value3) < 50:
-        print("f2")
-    if int(value1) > 90:
-        print("f3")
-    if int(value1) < 80:
-        print("f4")
-    if int(value2) > 37:
-        print("f5")
-    if int(value2) < 31:
-        print("f6")
-    sleep(20)
+def on_disconnect(client, userdata, rc):
+    print("Disconnected From Broker")
+    
+    
+def on_message(client, userdata, message):
+    
+    if message.topic == 'channels/2271054/subscribe/fields/field1':
+        temp = message.payload.decode()[0:2]
+        print("Nhiet do: {}".format(temp))
+        lcd.setCursor(0,0)
+        lcd.write('Temp:{}C'.format(temp))
+        if int(temp)>=20 and int(temp)<=30:
+            print("Giu status")
+        if int(temp)<20:
+            buzzer.off()
+        if int(temp)>30:
+            buzzer.on()
+    if message.topic == 'channels/2271054/subscribe/fields/field2':
+        humi = message.payload.decode()[0:2]
+        lcd.setCursor(0,9)
+        lcd.write('hum:{}%'.format(humi))
+        print("Do am: {}".format(humi))
+        if int(humi)>=80 and int(humi)<=90:
+            print("giu status")
+        if int(humi)>90:
+            relay.on()
+        if int(humi)<80:
+            relay.off()
+    if message.topic == 'channels/2271054/subscribe/fields/field3':
+        rd = message.payload.decode()[0:3]
+        rds = rd
+        lcd.setCursor(1,0)
+        lcd.write('Random: {}'.format(str(rds)+' '))
+        print("Random: {}".format(rd))
+        print('--------------------')
+        if (int(rd) > 50):
+            led.on()
+        else:
+            led.off()
+    
+client = mqtt.Client(ClientID)
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.on_message = on_message
+client.username_pw_set(username, password)
+client.connect("mqtt3.thingspeak.com", 1883, 60)
+client.loop_forever()
