@@ -18,7 +18,6 @@ def http():
         return respone_data
     
     while True:
-        
         try:
             humi = randint(70,100)
             temp = randint(25,45)
