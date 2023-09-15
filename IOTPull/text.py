@@ -5,6 +5,10 @@ from grove.display.jhd1802 import JHD1802
 username = "Kx4yGAsGCCcGCw8cHRUrChs"
 password = "1ci9UdvACHX+UWtmHxxEJf8F"
 ClientID = "Kx4yGAsGCCcGCw8cHRUrChs"
+buzzer = LED(12)
+led = LED(5)
+relay = LED(16)
+lcd = JHD1802()
 i = 0
 
 
