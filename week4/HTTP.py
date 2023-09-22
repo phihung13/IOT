@@ -27,7 +27,6 @@ while True:
     now = datetime.now()
     humi, temp = SENSOR.read()
     random_value = random.randrange(0, 100, 1)
-    
     print("TEMP: {}".format(temp))
     print("HUMIDITY: {}".format(humi))
     print("RANDOM VALUE: {}".format(random_value))
