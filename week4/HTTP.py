@@ -24,17 +24,23 @@ def thing_speak_post(params):
     return respone_data
 
 while True:
-    now = datetime.now()
-    humi, temp = SENSOR.read()
-    random_value = random.randrange(0, 100, 1)
-    
-    print("TEMP: {}".format(temp))
-    print("HUMIDITY: {}".format(humi))
-    print("RANDOM VALUE: {}".format(random_value))
-    
-    params_thingspeak=make_param_thingspeak(temp, humi, random_value)
-    thing_speak_post(params_thingspeak)
-    
-    current_time = now.strftime("%H:%M:%S")
-    print("Current Time =", current_time)
-    sleep(20)
+
+    try:
+        now = datetime.now()
+        humi, temp = SENSOR.read()
+        random_value = random.randrange(0, 100, 1)
+        
+        print("TEMP: {}".format(temp))
+        print("HUMIDITY: {}".format(humi))
+        print("RANDOM VALUE: {}".format(random_value))
+        
+        params_thingspeak=make_param_thingspeak(temp, humi, random_value)
+        thing_speak_post(params_thingspeak)
+        
+        current_time = now.strftime("%H:%M:%S")
+        print("Current Time =", current_time)
+        sleep(20)
+            
+    except:
+        print('KHONG CO INTERNET \n KIEM TRA VA THU LAI')
+        sleep(2)
