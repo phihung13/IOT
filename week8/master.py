@@ -20,7 +20,7 @@ def make_param_thingspeak(humidity, temperature):
     params = parse.urlencode({'field1': temperature, 'field2': humidity}).encode() 
     return params
 def thingspeak_post(params):
-    api_key_write = "VH7RW35C0KBKR3S3" 
+    api_key_write = "XI5UGICFB7RKB8GP" 
     req = request.Request('https://api.thingspeak.com/update', method="POST")
     req.add_header("Content-Type", "application/x-www-form-urlencoded")
     req.add_header("X-THINGSPEAKAPIKEY", api_key_write)
