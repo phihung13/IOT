@@ -62,12 +62,16 @@ async def get_last_record(number : int):
 #    return {"status": "Ok","data": number_record}
 
 @record.get("/api/getTime/{time}")
-async def get_record_by_time(start: datetime, end: datetime):
+async def get_record_by_time():
+   s = "2023-10-16 04:30:55"
+   e = "2023-10-16 04:37:55"
+   ss = datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
+   ee = datetime.strptime(e, "%Y-%m-%d %H:%M:%S")
    number_record = records_serializer(collection.find(
     {
         "time": {
-            "$gte": start,
-            "$lt" : end
+            "$gte": ss,
+            "$lt" : ee
         }
     }
    ))
