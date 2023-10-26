@@ -9,6 +9,5 @@ def record_serializer(record) -> dict:
         'led2' : record["led2"],
     }
 
-
 def records_serializer(records) -> list:
     return [record_serializer(record) for record in records]

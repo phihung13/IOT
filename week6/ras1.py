@@ -30,7 +30,7 @@ while True:
     try:        
         # GET DATA FROM SENSOR AFTER POST TO SERVER EACH 20S
         r_temp = random.randrange(0,100)
-        r_humi = random.randrange(50,100)
+        r_humi = random.randrange(0,100)
         try:
             # humi, temp = SENSOR.read()
             # print("TEMP POST: ",temp)
@@ -48,4 +48,4 @@ while True:
             print("SUBMITTED SUCCESSFULLY")
     except:
         print('KHONG CO INTERNET \n KIEM TRA VA THU LAI')
-    sleep(3)
+    sleep(5)

@@ -5,14 +5,10 @@ from config.db import collection
 from datetime import datetime
 from fastapi import FastAPI, Body, Depends, HTTPException, status
 from fastapi.responses import HTMLResponse
-
 from auth import auth
 
 
-
-# record = APIRouterR(dependencies=[Depends(auth.validate_api_key)])
-
-record = APIRouter()
+record = APIRouter(dependencies=[Depends(auth.validate_api_key)])
 
 # Use POST method to send data to server
 @record.post("/api")
