@@ -3,6 +3,13 @@ from time import sleep
 import random
 import json
 from datetime import datetime
+from seeed_dht import DHT
+from gpiozero import LED
+
+
+SENSOR = DHT('11', 18)
+led1 = LED(5)
+led2 = LED(6)
 
 def create_body(device_name: str, time: datetime, tem: int, humi: int, led1: bool, led2: bool):
     data ={
@@ -51,10 +58,11 @@ def get_method(query_string):
     return respone_data
 
 while True:
+    humi, tem = SENSOR.read()
     device_name = "ras1"
     time = datetime.now()
-    tem = random.randint(0,100)
-    humi = random.randint(0,100)
+    # tem = random.randint(0,100)
+    # humi = random.randint(0,100)
     led1 = True
     led2 = False
     # body = create_body(device_name, time, tem, humi, led1, led2)

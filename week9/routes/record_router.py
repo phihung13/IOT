@@ -6,24 +6,21 @@ from datetime import datetime
 from fastapi import FastAPI, Body, Depends, HTTPException, status
 from fastapi.responses import HTMLResponse
 from auth import auth
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 
 record = APIRouter(dependencies=[Depends(auth.validate_api_key)])
+# record = APIRouter()
 
 # Use POST method to send data to server
 @record.post("/api")
 async def post_create_record(record: Record):
     _id = collection.insert_one(dict(record))
     record = records_serializer(collection.find({"_id": _id.inserted_id}))
-    print(record[0]["time"])
     return {"status": "Ok","data": record}
 
-
-# get all record from server
-@record.get("/api/getAll")
-async def find_all_records():
-    records = records_serializer(collection.find({}).sort([['_id', -1]] ))
-    return {"status": "Ok","data": records}
 
 # Use GET method to send data to server
 @record.get("/api/{record}")
@@ -40,48 +37,100 @@ async def get_create_record(device_name: str, tem: int , humi: int , led1: bool,
     record = records_serializer(collection.find({"_id": _id.inserted_id}))
     return {"status": "Ok","data": record}
 
-# get one record by id  
-# @record.get("/api/getOne/{id}")
-# async def get_one_record(id: str):
-#    record = records_serializer(collection.find({"_id": ObjectId(id)}))
-#    return {"status": "Ok","data": record}
+
+# get all record from server
+@record.get("/api/getAll")
+async def find_all_records():
+    records = records_serializer(collection.find({}).sort([['_id', -1]] ))
+    return {"status": "Ok","data": records}
+
 
 # get the last n records from server
 @record.get("/api/getNLast/{n}")
 async def get_last_record(number : int):
-   number_record = records_serializer(collection.find().sort([['_id', -1]] ).limit(number))
+   number_record = records_serializer(collection.find().sort([['_id', -1]]).limit(number))
    return {"status": "Ok","data": number_record}
 
-# @record.get("/api/getNLast/{time}")
-# async def get_record_by_time(start_time: datetime = datetime.now()  , end_time: datetime = datetime.now()):
-#    number_record = records_serializer(collection.find({}))
-#    return {"status": "Ok","data": number_record}
-
 @record.get("/api/getTime/{time}")
-async def get_record_by_time():
-   s = "2023-10-16 04:30:55"
-   e = "2023-10-16 04:37:55"
-   ss = datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
-   ee = datetime.strptime(e, "%Y-%m-%d %H:%M:%S")
+async def get_record_by_time(start: datetime, end: datetime):
+
    number_record = records_serializer(collection.find(
     {
         "time": {
-            "$gte": ss,
-            "$lt" : ee
+            "$gte": start,
+            "$lt" : end
         }
     }
    ))
    return {"status": "Ok","data": number_record}
 
-@record.get("/graph/", response_class=HTMLResponse)
-async def read_items():
-    return """
+def get_data():
+    data = collection.find() 
+    tem = []
+    humi = []
+    time = []
+    led1 = []
+    led2 = []
+    
+    for item in data:
+        tem.append(item['tem'])  
+        humi.append(item['humi'])
+        time.append(item['time'])
+        led1.append(item['led1'])
+        led2.append(item['led2'])
+    
+    return tem, humi, time, led1, led2
+
+def plot_line_chart(data1, data2,time, led1, led2):
+    plt.figure()
+
+    plt.subplot(2, 2, 1)
+    plt.plot(time,data1)
+    plt.xlabel('Time')
+    plt.ylabel('Temp')
+    plt.legend()
+
+    plt.subplot(2, 2, 2)
+    plt.plot(time,data2)
+    plt.xlabel('TIME')
+    plt.ylabel('Humi')
+    plt.legend()
+
+    plt.subplot(2, 2, 3)
+    plt.plot(time,led1)
+    plt.xlabel('Time')
+    plt.ylabel('Led1')
+    plt.legend()
+
+    plt.subplot(2, 2, 4)
+    plt.plot(time,led2)
+    plt.xlabel('Time')
+    plt.ylabel('Led2')
+    
+    plt.legend()
+    plt.suptitle('GRAPH')
+
+    img_buf = BytesIO()
+    plt.savefig(img_buf, format='png')
+    img_buf.seek(0)
+    img_base64 = base64.b64encode(img_buf.read()).decode('utf-8')
+    return img_base64
+
+@record.get("/graph", response_class=HTMLResponse)
+def display_graph():
+    data1, data2, id_values, trang_thai_led1, trang_thai_led2 = get_data()
+    img_base64 = plot_line_chart(data1, data2, id_values, trang_thai_led1, trang_thai_led2)
+    
+    html_content = f"""
     <html>
-        <head>
-            <title>Some HTML in here</title>
-        </head>
-        <body>
-            <h1>Look ma! HTML!</h1>
-        </body>
+    <head>
+        <title>GRAPH</title>
+        <meta http-equiv="refresh" content="5" >
+    </head>
+    <body>
+        <h1>SHOW DATA</h1>
+        <img src="data:image/png;base64,{img_base64}" />
+    </body>
     </html>
     """
+    return html_content
