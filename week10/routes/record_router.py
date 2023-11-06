@@ -139,38 +139,34 @@ def display_graph():
 
 @record.post("/api/broker")
 async def broker_post_record(record: Record):
-    print(record)
     _id = collection2.insert_one(dict(record))
     record = records_serializer(collection2.find({"_id": _id.inserted_id}))
     return {"status": "Ok","data": record}
 
 @record.post("/api/temp")
-async def broker_post_record(temp: Temp):
-    print(temp)
+async def broker_post_temp(temp: Temp):
     _id = collection_temp.insert_one(dict(temp))
     temp = temps_serializer(collection_temp.find({"_id": _id.inserted_id}))
     return {"status": "Ok","data": temp}
 
-# @record.post("/api/humi")
-# async def broker_post_record(humi: Humi):
-#     print(humi)
-#     _id = collection_humi.insert_one(dict(humi))
-#     humi = humis_serializer(collection_humi.find({"_id": _id.inserted_id}))
-#     return {"status": "Ok","data": humi}
+@record.post("/api/humi")
+async def broker_post_humi(humi: Humi):
+    _id = collection_humi.insert_one(dict(humi))
+    humi = humis_serializer(collection_humi.find({"_id": _id.inserted_id}))
+    return {"status": "Ok","data": humi}
 
-# @record.post("/api/led1")
-# async def broker_post_record(led1: Led1):
-#     print(led1)
-#     _id = collection_led1.insert_one(dict(led1))
-#     led1 = led1s_serializer(collection_led1.find({"_id": _id.inserted_id}))
-#     return {"status": "Ok","data": led1}
+@record.post("/api/led1")
+async def broker_post_led1(led1: Led1):
+    _id = collection_led1.insert_one(dict(led1))
+    led1 = led1s_serializer(collection_led1.find({"_id": _id.inserted_id}))
+    return {"status": "Ok","data": led1}
 
-# @record.post("/api/led2")
-# async def broker_post_record(led2: Led2):
-#     print(led2)
-#     _id = collection_led2.insert_one(dict(led2))
-#     led2 = led2s_serializer(collection_led2.find({"_id": _id.inserted_id}))
-#     return {"status": "Ok","data": led2}
+@record.post("/api/led2")
+async def broker_post_led2(led2: Led2):
+    print(led2)
+    _id = collection_led2.insert_one(dict(led2))
+    led2 = led2s_serializer(collection_led2.find({"_id": _id.inserted_id}))
+    return {"status": "Ok","data": led2}
 
 
 # Use GET method to send data to server

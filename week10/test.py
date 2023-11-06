@@ -5,8 +5,8 @@ from random import randint
 import json
 from datetime import datetime
 
-username="device1"
-password ="1"
+username="pi"
+password ="pi"
 client_id = "client1"
 ip = "127.0.0.1"
 port = 1883
@@ -42,7 +42,7 @@ def pub_test():
 
     url_encoded_data = urllib.parse.urlencode(data)
     print(url_encoded_data)
-    client.publish(topic=top_test, payload= url_encoded_data, retain=True)
+    client.subscribe("temp")
 
 
 

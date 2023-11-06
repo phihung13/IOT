@@ -2,8 +2,8 @@ import paho.mqtt.client as mqtt
 import time
 from datetime import datetime
 
-username="device2"
-password ="2"
+username="pi"
+password ="pi"
 client_id = "client2"
 ip = "127.0.0.1"
 port = 1883
@@ -21,7 +21,6 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("humi")
     client.subscribe("led1")
     client.subscribe("led2")
-    client.subscribe("all")
 
     
 def on_disconnect(client, userdata, rc):
@@ -44,9 +43,6 @@ def on_message(client, userdata, msg):
         led2 = msg.payload.decode()
         print("topic led2: {}".format(led2))
 
-    if msg.topic == 'all':
-        all = msg.payload.decode()
-        print("topic all: {}".format(all))
     
 client = mqtt.Client(client_id)
 client.on_connect = on_connect
