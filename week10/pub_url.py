@@ -1,15 +1,15 @@
 import paho.mqtt.client as mqtt
-import time
+from time import sleep
 from random import randint
 import urllib.parse
 from datetime import datetime
-from seeed_dht import DHT
-from gpiozero import LED
+# from seeed_dht import DHT
+# from gpiozero import LED
 
 username="device2"
 password ="2"
 client_id = "client2"
-ip = "192.168.1.21"
+ip = "127.0.0.1"
 port = 1883
 top_temp = "temp_url"
 top_humi = "humi_url"
@@ -18,9 +18,14 @@ top_led2 = "led2_url"
 all_top = "all_urlencode"
 device_name = "ras_pub"
 
-SENSOR = DHT('11', 18)
-led1 = LED(5)
-led2 = LED(6)
+# SENSOR = DHT('11', 18)
+# led1 = LED(5)
+# led2 = LED(6)
+
+led1 = True
+led2 = True
+humi = 2
+temp = 4
 
 def on_connect(client, userdata, flags, rc):
     print("Connected With Result Code {}".format(rc))
@@ -97,11 +102,11 @@ while True:
         led1 = False
         led2 = False
 
-    humi, temp = SENSOR.read()
+    # humi, temp = SENSOR.read()
     i = i+1 
     pub_all_url(device_name, time, temp, humi, led1, led2)
-    # pub_temp_url(device_name, time, temp)
+    pub_temp_url(device_name, time, temp)
     # pub_humi_url(device_name, time, humi)
     # pub_led1_url(device_name, time, led1)
     # pub_led2_url(device_name, time, led2)
-    time.sleep(5)
+    sleep(15)

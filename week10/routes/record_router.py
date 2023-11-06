@@ -135,7 +135,7 @@ def display_graph():
     return html_content
 
 
-"""Từ khúc này trở xuống là bài 10 chỉ đổi cái collection thôi"""
+"""bài 10"""
 
 @record.post("/api/broker")
 async def broker_post_record(record: Record):

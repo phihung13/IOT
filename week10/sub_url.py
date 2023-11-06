@@ -1,23 +1,25 @@
 import paho.mqtt.client as mqtt
 import time
 from datetime import datetime
+import urllib.parse
 
-username="device3"
-password ="3"
-client_id = "client3"
+
+username="device4"
+password ="4"
+client_id = "client5"
 ip = "127.0.0.1"
 port = 1883
-top_temp = "temp"
-top_humi = "humi"
-top_led1 = "led1"
-top_led2 = "led2"
-all_top = "all_json"
+top_temp = "temp_url"
+top_humi = "humi_url"
+top_led1 = "led1_url"
+top_led2 = "led2_url"
+all_url = "all_urlencode"
 device_name = "ras_sub"
 
 
 def on_connect(client, userdata, flags, rc):
     print("Connected With Result Code {}".format(rc))
-    client.subscribe(all_top)
+    client.subscribe(all_url)
     client.subscribe(top_temp)
     client.subscribe(top_humi)
     client.subscribe(top_led1)
@@ -28,26 +30,25 @@ def on_disconnect(client, userdata, rc):
     print("Disconnected From Broker")
      
 def on_message(client, userdata, msg):
-    if msg.topic == all_top:
-        all_json = msg.payload.decode()
-        print("topic all_json: {}".format(all_json))
+    if msg.topic == all_url:
+        all_urlencode = urllib.parse.parse_qs(msg.payload)
+        print("topic all_urlencode: {}".format(all_urlencode))
 
     if msg.topic == top_temp:
-        temp = msg.payload.decode()
-        print("topic TEMP: {}".format(temp))
+        temp = urllib.parse.parse_qs(msg.payload)
+        print("topic temp_url: {}".format(temp))
     
     if msg.topic == top_humi:
-        humi = msg.payload.decode()
+        humi = urllib.parse.parse_qs(msg.payload)
         print("topic HUMI: {}".format(humi))
 
     if msg.topic == top_led1:
-        led1 = msg.payload.decode()
+        led1 = urllib.parse.parse_qs(msg.payload)
         print("topic led1: {}".format(led1))
 
     if msg.topic == top_led2:
-        led2 = msg.payload.decode()
+        led2 = urllib.parse.parse_qs(msg.payload)
         print("topic led2: {}".format(led2))
-
     
 client = mqtt.Client(client_id)
 client.on_connect = on_connect

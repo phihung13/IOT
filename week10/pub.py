@@ -1,15 +1,15 @@
 import paho.mqtt.client as mqtt
-import time
+from time import sleep
 from random import randint
 import json
 from datetime import datetime
-from seeed_dht import DHT
-from gpiozero import LED
+# from seeed_dht import DHT
+# from gpiozero import LED
 
 username="device1"
 password ="1"
 client_id = "client1"
-ip = "192.168.1.21"
+ip = "127.0.0.1"
 port = 1883
 top_temp = "temp"
 top_humi = "humi"
@@ -18,10 +18,14 @@ top_led2 = "led2"
 all_top = "all_json"
 device_name = "ras_pub"
 
-SENSOR = DHT('11', 18)
-led1 = LED(5)
-led2 = LED(6)
+# SENSOR = DHT('11', 18)
+# led1 = LED(5)
+# led2 = LED(6)
 
+led1 = True
+led2 = True
+humi = 2
+temp = 4
 
 def on_connect(client, userdata, flags, rc):
     print("Connected With Result Code {}".format(rc))
@@ -45,7 +49,7 @@ def pub_all(device_name: str, time: datetime, temp: int, humi: int, led1: bool, 
         "led2": led2,
     }
     payload = json.dumps(data)
-    print(payload)
+    print("payload all:", payload)
     client.publish(topic=all_top, payload= payload, retain=True)
 
 
@@ -56,7 +60,7 @@ def pub_temp(device_name: str, time: datetime, temp: int):
         "temp": temp,
     }
     payload = json.dumps(data)
-    print(payload)
+    print("payload temp: ", payload)
     client.publish(topic=top_temp, payload= payload, retain=True)
 
 def pub_humi(device_name: str, time: datetime, humi: int):
@@ -99,11 +103,11 @@ while True:
         led1 = False
         led2 = False
 
-    humi, temp = SENSOR.read()
+    # humi, temp = SENSOR.read()
 
     pub_all(device_name, time, temp, humi, led1, led2)
     pub_temp(device_name, time, temp)
     # pub_humi(device_name, time, humi)
     # pub_led1(device_name, time, led1)
     # pub_led2(device_name, time, led2)
-    time.sleep(5)
+    sleep(5)
