@@ -100,8 +100,8 @@ while True:
     humi, temp = SENSOR.read()
     i = i+1 
     pub_all_url(device_name, time, temp, humi, led1, led2)
-    # pub_temp_url(device_name, time, temp)
-    # pub_humi_url(device_name, time, humi)
-    # pub_led1_url(device_name, time, led1)
-    # pub_led2_url(device_name, time, led2)
+    pub_temp_url(device_name, time, temp)
+    pub_humi_url(device_name, time, humi)
+    pub_led1_url(device_name, time, led1)
+    pub_led2_url(device_name, time, led2)
     time.sleep(5)

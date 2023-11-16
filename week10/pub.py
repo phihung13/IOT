@@ -103,7 +103,7 @@ while True:
 
     pub_all(device_name, time, temp, humi, led1, led2)
     pub_temp(device_name, time, temp)
-    # pub_humi(device_name, time, humi)
-    # pub_led1(device_name, time, led1)
-    # pub_led2(device_name, time, led2)
+    pub_humi(device_name, time, humi)
+    pub_led1(device_name, time, led1)
+    pub_led2(device_name, time, led2)
     time.sleep(5)
