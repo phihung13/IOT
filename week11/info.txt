@@ -1,0 +1,4 @@
+username: 	reone
+pass: 		50fyIuZCO23UBLXV
+
+URL: 		mongodb+srv://reone:50fyIuZCO23UBLXV@reone.noidfzq.mongodb.net/?retryWrites=true&w=majority
