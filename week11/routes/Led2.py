@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends
 from models.user_model import *
-from schemas.schema import led2_serializer, led2s_serializer
+from schemas.schema_led2 import led2_serializer, led2s_serializer
 from config.db import *
 from datetime import datetime
 from auth import auth
-from emqx.pub import pub_led2
-from emqx.pub import pub_all
+from emqx.http_publish import pub_led2
 
 # led2 = APIRouter(dependencies=[Depends(auth.validate_api_key)])
 led2 = APIRouter()
@@ -15,14 +14,12 @@ led2 = APIRouter()
 @led2.post("/api/led2/")
 async def post_create_led2(led2: Led2):
     led2 = dict(led2)
-    pub_all(device_name= led2["device_name"], data={"led2": led2["led2"]})
     result = pub_led2(device_name= led2["device_name"], led2=led2["led2"])
     return {"status": "Ok","data": result}
 
 # GET method to send led2 to server
 @led2.get("/api/led2/")
 async def get_create_led2(device_name: str, led2: bool ):
-    pub_all(device_name= device_name, data={"led2": led2})   
     result = pub_led2(device_name= device_name, led2=led2)
     return {"status": "Ok","data": result}
 

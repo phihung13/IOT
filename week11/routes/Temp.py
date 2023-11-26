@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends
 from models.user_model import *
-from schemas.schema import temp_serializer, temps_serializer
+from schemas.schema_temp import temp_serializer, temps_serializer
 from config.db import *
 from datetime import datetime
 from auth import auth
-from emqx.pub import pub_temp
-from emqx.pub import pub_all
+from emqx.http_publish import pub_temp
 
 # temp = APIRouter(dependencies=[Depends(auth.validate_api_key)])
 temp = APIRouter()
@@ -14,14 +13,12 @@ temp = APIRouter()
 @temp.post("/api/temp/")
 async def post_create_temp(temp: Temp):
     temp = dict(temp)
-    pub_all(device_name= temp["device_name"], data={"temp": temp["temp"]})
     result = pub_temp(device_name= temp["device_name"], temp=temp["temp"])
     return {"status": "Ok","data": result}
 
 # GET method to send TEMP to server
 @temp.get("/api/temp/{temp}")
 async def get_create_temp(device_name: str, temp: int ):  
-    pub_all(device_name= device_name, data={"temp": temp})
     result = pub_temp(device_name= device_name, temp= temp)
     return {"status": "Ok","data": result}
 

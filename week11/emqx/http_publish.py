@@ -7,14 +7,20 @@ from datetime import datetime
 username="http"
 password ="http"
 client_id = "http"
-ip = "127.0.0.1"
-port = 1883
+
+IP_HTTP_SERVER = "192.168.1.14"
+PORT = 1883
+
 top_temp = "temp"
 top_humi = "humi"
 top_led1 = "led1"
 top_led2 = "led2"
-top_ultra = "ultra"
-top_rotary = "rotary"
+top_ledstick = "ledstick"
+top_digit = "digit"
+top_sonic = "sonic"
+top_light = "light"
+top_lcd = "lcd"
+top_thump = "thump"
 top_all = "all"
 
 def on_connect(client, userdata, flags, rc):
@@ -27,7 +33,7 @@ client = mqtt.Client(client_id)
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.username_pw_set(username=username, password= password)
-client.connect(ip, port, 60)
+client.connect(IP_HTTP_SERVER, PORT, 60)
 
 def pub_all(device_name: str, data: dict):
     data = {
@@ -84,6 +90,7 @@ def pub_led1(device_name: str, led1: bool):
     except:
         return "Error"
 
+
 def pub_led2(device_name: str, led2: bool):
     data = {
         "device_name": device_name,
@@ -97,28 +104,86 @@ def pub_led2(device_name: str, led2: bool):
     except:
         return "Error"
     
-def pub_ultra(device_name: str, ultra: int):
+
+def pub_ledstick(device_name: str, ledstick: int):
     data = {
         "device_name": device_name,
-        "ultra": ultra,
+        "ledstick": ledstick,
     }
     payload = json.dumps(data)
     print(payload)
     try:
-        client.publish(topic=top_ultra, payload= payload, retain=True)
+        client.publish(topic=top_ledstick, payload= payload, retain=True)
         return data
     except:
         return "Error"
     
-def pub_rotary(device_name: str, rotary: int):
+
+def pub_digit(device_name: str, digit: int):
     data = {
         "device_name": device_name,
-        "rotary": rotary,
+        "digit": digit,
     }
     payload = json.dumps(data)
     print(payload)
     try:
-        client.publish(topic=top_rotary, payload= payload, retain=True)
+        client.publish(topic=top_digit, payload= payload, retain=True)
+        return data
+    except:
+        return "Error"
+
+
+def pub_sonic(device_name: str, sonic: int):
+    data = {
+        "device_name": device_name,
+        "sonic": sonic,
+    }
+    payload = json.dumps(data)
+    print(payload)
+    try:
+        client.publish(topic=top_sonic, payload= payload, retain=True)
+        return data
+    except:
+        return "Error"
+
+
+def pub_light(device_name: str, light: int):
+    data = {
+        "device_name": device_name,
+        "light": light,
+    }
+    payload = json.dumps(data)
+    print(payload)
+    try:
+        client.publish(topic=top_light, payload= payload, retain=True)
+        return data
+    except:
+        return "Error"
+    
+
+def pub_lcd(device_name: str, lcd: int):
+    data = {
+        "device_name": device_name,
+        "lcd": lcd,
+    }
+    payload = json.dumps(data)
+    print(payload)
+    try:
+        client.publish(topic=top_lcd, payload= payload, retain=True)
+        return data
+    except:
+        return "Error"
+    
+    
+def pub_thump(device_name: str, thump: int):
+    data = {
+        "device_name": device_name,
+        "thump": thump,
+    }
+    payload = json.dumps(data)
+    print(payload)
+    try:
+        client.publish(topic=top_thump, payload= payload, retain=True)
         return data
     except:
         return "Error"
