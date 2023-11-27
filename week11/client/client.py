@@ -1,7 +1,6 @@
-from urllib import request, parse
+from urllib import request
 from time import sleep
 import random
-import json
 from datetime import datetime
 # from seeed_dht import DHT
 # from gpiozero import LED

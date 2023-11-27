@@ -7,7 +7,7 @@ import random
 # thump = ?
 # lcd = ?
 
-IP_SERVER = "192.168.1.24"
+IP_SERVER = "127.0.0.1"
 
 
 # Khai báo IP, PORT của UDP Master 

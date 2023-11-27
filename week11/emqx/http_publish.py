@@ -8,7 +8,7 @@ username="http"
 password ="http"
 client_id = "http"
 
-IP_HTTP_SERVER = "192.168.1.14"
+IP_HTTP_SERVER = "127.0.0.1"
 PORT = 1883
 
 top_temp = "temp"

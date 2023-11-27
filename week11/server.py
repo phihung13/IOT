@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from routes import Record, Temp, Humi, Led1, Led2, Ledstick, Digit, Sonic , Light, Lcd, Thump, Graph
 import uvicorn
@@ -42,4 +42,4 @@ async def home():
     return {"message": "Hello World"}
 
 if __name__ == "__main__":
-    uvicorn.run("server:app", port=8000, reload=True, access_log=True, host=host)
+    uvicorn.run("server:app", port=8000, reload=True, access_log=True)

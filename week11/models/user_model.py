@@ -1,6 +1,4 @@
 from pydantic import BaseModel
-from datetime import datetime
-from typing import Any
 
 class Record(BaseModel):
     device_name: str

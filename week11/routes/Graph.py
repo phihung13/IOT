@@ -1,19 +1,16 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, status
 from  config.db import *
 from schemas.schema import *
 from schemas import *
 import matplotlib.pyplot as plt
-import pandas as pd
 import matplotlib.dates as mdates
-from datetime import datetime
-from fastapi import FastAPI, Depends, Request, Response, status
-from starlette.responses import RedirectResponse, HTMLResponse, JSONResponse
+from starlette.responses import RedirectResponse, HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_login.exceptions import InvalidCredentialsException
 from fastapi_login import LoginManager
 from io import BytesIO
 import base64
-
+from datetime import datetime
 
 graph = APIRouter()
 
@@ -37,7 +34,6 @@ def load_user(user_id: str):
     user = DB['users'].get(user_id)
     return user
  
-
 @graph.get("/login", response_class=HTMLResponse)
 def login_form():
     return """
@@ -167,7 +163,6 @@ def draw_graph():
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S\n%y,%m,%d'))
     plt.xticks(rotation=45) 
     
-
     plt.subplot(4, 2, 2)
     plt.plot(time_humi, humi_value, marker='o', linestyle='-')
     plt.xlabel('time')

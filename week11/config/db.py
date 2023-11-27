@@ -8,8 +8,8 @@ DATABASE_URL=f"mongodb+srv://{MONGO_INITDB_ROOT_USERNAME}:{MONGO_INITDB_ROOT_PAS
 
 db_connection = MongoClient(DATABASE_URL)
 db = db_connection.database_name
-collection = db["ALL"]
 
+collection = db["ALL"]
 collection_temp = db["TEMP"]
 collection_humi = db["HUMI"]
 collection_led1 = db["LED1"]
